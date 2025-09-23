@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{% block title %}Sleep Plotter{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% if theme %}
+    <style>
+      :root{
+        --bg: {{ theme.bg|default('#0b1020') }};
+        --card: {{ theme.card|default('#151a2b') }};
+        --text: {{ theme.text|default('#e9ecf1') }};
+        --accent: {{ theme.accent|default('#48b0ff') }};
+      }
+    </style>
+    {% endif %}
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

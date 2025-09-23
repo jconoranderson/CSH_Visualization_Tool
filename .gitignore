@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.log
+
+# Virtualenv
+.venv/
+venv/
+ENV/
+
+# OS
+.DS_Store
+
+# App artifacts
+generated_pdfs/
+
+# Jupyter
+.ipynb_checkpoints/
+

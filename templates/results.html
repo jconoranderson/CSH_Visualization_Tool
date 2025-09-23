@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Results — Sleep Plotter{% endblock %}
+{% block content %}
+  <h1>Generated PDFs ({{ n }} files)</h1>
+  <p>Select a file to download, or download them all at once.</p>
+
+  <div class="row">
+    <a class="btn" href="{{ url_for('download_all_zip', job_id=job_id) }}">Download all as ZIP</a>
+  </div>
+
+  <ul>
+    {% for fn in files %}
+      <li><a class="dl" href="{{ url_for('download_pdf', job_id=job_id, filename=fn) }}" download>{{ fn }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+{% block scripts %}{% endblock %}
