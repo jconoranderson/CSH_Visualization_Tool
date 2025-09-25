@@ -30,7 +30,7 @@ app = Flask(__name__)
 # --------------------------- Parsing utilities ---------------------------
 
 TIME_NOW = datetime.now(ZoneInfo("America/New_York"))
-DATE_TIME = TIME_NOW.strftime("%A, %B %d, %Y %I:%M:%S %p %Z%z")
+DATE_TIME = TIME_NOW.strftime("%A, %B %d, %Y %I:%M:%S %p %Z%z")pu
 
 DEFAULT_YEAR = datetime.now(ZoneInfo("America/New_York")).year
 
@@ -222,6 +222,7 @@ def _build_dt(date_str, time_str, ampm):
 def fix_future_dates_per_person(g: pd.DataFrame) -> pd.DataFrame:
     """Shift future start_dt/end_dt back by full years until <= today; ensure end>=start."""
     today = pd.Timestamp.today().normalize()
+    person_name = getattr(g, "name", None)
 
     def _safe_replace_year(ts, y):
         try:
@@ -239,6 +240,8 @@ def fix_future_dates_per_person(g: pd.DataFrame) -> pd.DataFrame:
         return out
 
     g = g.copy()
+    if person_name is not None and "Name" not in g.columns:
+        g.insert(0, "Name", person_name)
     g["start_dt"] = g["start_dt"].apply(_to_past)
     g["end_dt"]   = g["end_dt"].apply(_to_past)
     mask = g["end_dt"].notna() & g["start_dt"].notna() & (g["end_dt"] < g["start_dt"])
@@ -274,7 +277,10 @@ def _coerce_parsed(df: pd.DataFrame):
     out["end_dt"]   = pd.to_datetime(out["end_dt"],   errors="coerce")
     out["duration_hr"] = pd.to_numeric(out["duration_hr"], errors="coerce")
     out["interruptions"] = pd.to_numeric(out["interruptions"], errors="coerce")
-    out = out.groupby("Name", group_keys=False).apply(fix_future_dates_per_person)
+    out = out.groupby("Name", group_keys=False).apply(
+        fix_future_dates_per_person,
+        include_groups=False,
+    )
     out = out.dropna(subset=["start_dt", "duration_hr"])
     return out
 
@@ -316,7 +322,10 @@ def _parse_raw_details(df: pd.DataFrame):
             sleep[col] = pd.NA
 
     # Fix future dates per person & drop invalids
-    sleep = sleep.groupby("Name", group_keys=False).apply(fix_future_dates_per_person)
+    sleep = sleep.groupby("Name", group_keys=False).apply(
+        fix_future_dates_per_person,
+        include_groups=False,
+    )
     sleep = sleep.dropna(subset=["start_dt", "duration_hr"])
     return sleep[keep]
 
@@ -574,4 +583,4 @@ def result(job_id):
 
 if __name__ == "__main__":
     # Run on all interfaces for intranet access
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.run(host="0.0.0.0", port=5001, debug=False)

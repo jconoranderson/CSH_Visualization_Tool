@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Sleep Plotter{% endblock %}
 {% block content %}
-  <h1>Sleep Plotter</h1>
+  <h1>CSH Sleep Plotter</h1>
   <p class="sub">Upload a CSV (raw <code>Details,Name</code> or parsed <code>Name,start_dt,end_dt,duration_hr,interruptions</code>) and download per-person PDFs.</p>
   <form method="POST" action="{{ url_for('upload') }}" enctype="multipart/form-data">
     <label for="csv">CSV file</label>
