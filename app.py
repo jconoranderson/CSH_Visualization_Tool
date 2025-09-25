@@ -30,7 +30,7 @@ app = Flask(__name__)
 # --------------------------- Parsing utilities ---------------------------
 
 TIME_NOW = datetime.now(ZoneInfo("America/New_York"))
-DATE_TIME = TIME_NOW.strftime("%A, %B %d, %Y %I:%M:%S %p %Z%z")pu
+DATE_TIME = TIME_NOW.strftime("%A, %B %d, %Y %I:%M:%S %p %Z%z")
 
 DEFAULT_YEAR = datetime.now(ZoneInfo("America/New_York")).year
 
@@ -460,7 +460,7 @@ def plot_person_windows_to_pdf(person: pd.DataFrame, pdf: PdfPages, person_name:
         period_label = f"{obs_min.strftime('%b %d, %Y')} – {obs_max.strftime('%b %d, %Y')}"
 
         # Label
-        ax.text(0.98, 1.3,
+        ax.text(0.98, 1.35,
                 f"Avg sleep: {avg_str}\n"
                 f"Avg start: {s_str}\n"
                 f"Avg end:   {e_str}\n"
